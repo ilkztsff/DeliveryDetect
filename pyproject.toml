@@ -7,7 +7,20 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+fastapi = "^0.111.0"
+aiogram = "^3.8.0"
+sqlalchemy = "^2.0.31"
+asyncpg = "^0.29.0"
+alembic = "^1.13.2"
+redis = "^5.0.7"
+uvicorn = "^0.30.1"
+python-dotenv = "^1.0.1"
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.0"
+mypy = "^1.10.1"
+pytest = "^8.2.2"
+coverage = "^7.5.4"
 
 [build-system]
 requires = ["poetry-core"]
