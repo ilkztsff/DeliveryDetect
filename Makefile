@@ -25,7 +25,7 @@ update:
 
 lint:
 	poetry run flake8
-	poetry run mypy -p cut_url
+	poetry run mypy -p deliverydetect
 
 test:
 	poetry run docker-compose -f docker-compose.test.yml up --remove-orphans -d
