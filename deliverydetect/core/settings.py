@@ -11,7 +11,7 @@ WEB_SERVER_URL: str = environ['WEB_SERVER_URL']
 WEBHOOK_URL: str = f'{WEB_SERVER_URL}{"/" if not WEB_SERVER_URL.endswith("/") else ""}{WEBHOOK_PATH}'
 
 REDIS_HOST: str = environ.get('REDIS_HOST', 'localhost')
-REDIS_PORT: str = environ['REDIS_PORT']
+REDIS_PORT = int(environ['REDIS_PORT'])
 REDIS_PASSWORD: str = environ['REDIS_PASSWORD']
 
 POSTGRES_PORT: str = environ['POSTGRES_PORT']
