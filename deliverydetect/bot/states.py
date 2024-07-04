@@ -6,3 +6,4 @@ class GetCourierInfo(StatesGroup):
     GET_CONTACT = State()
     GET_HAS_THERMAL_BAG = State()
     GET_TRANSPORT = State()
+    CONFIRM = State()
