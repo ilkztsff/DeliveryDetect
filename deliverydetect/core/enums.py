@@ -33,6 +33,6 @@ transport = {
 }
 
 confirmation = {
-    '✅ Да': Confirmation.YES,
-    '❌ Нет': Confirmation.NO
+    '✅ Да': True,
+    '❌ Нет': False
 }
