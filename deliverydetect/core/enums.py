@@ -11,3 +11,28 @@ class Transport(str, Enum):
     BIKE = 'bike'
     CAR = 'car'
     MOTORBIKE = 'MOTORBIKE'
+
+
+class CourierMenuState(str, Enum):
+    NAME = 'name'
+    CONTACT = 'contact'
+    HAS_THERMAL_BAG = 'has_thermal_bag'
+    TRANSPORT = 'transport'
+
+
+class Confirmation(str, Enum):
+    YES = True
+    NO = False
+
+
+transport = {
+    '🚴 Велосипед': Transport.BIKE,
+    '🚘 Автомобиль': Transport.CAR,
+    '🏍 Мотоцикл': Transport.MOTORBIKE,
+    '🧍 Я хожу пешком': Transport.FEET
+}
+
+confirmation = {
+    '✅ Да': Confirmation.YES,
+    '❌ Нет': Confirmation.NO
+}
