@@ -15,7 +15,7 @@ rm:
 	sudo rm -rf db
 
 revision:
-	poetry run alembic revision --autogenerate -m $(name)
+	poetry run alembic revision --autogenerate
 
 upgrade:
 	poetry run alembic upgrade $(revision)
