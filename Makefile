@@ -23,6 +23,9 @@ upgrade:
 downgrade:
 	poetry run alembic downgrade $(revision)
 
+install:
+	poetry install
+
 update:
 	poetry update
 
