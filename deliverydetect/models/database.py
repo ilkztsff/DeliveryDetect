@@ -1,10 +1,9 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from deliverydetect.core.enums import Transport
 
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 
 class Courier(Base):
