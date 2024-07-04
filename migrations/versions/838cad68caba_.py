@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: 838cad68caba
-Revises: 
+Revises:
 Create Date: 2024-07-04 13:20:24.114995
 
 """
