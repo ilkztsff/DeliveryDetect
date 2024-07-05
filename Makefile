@@ -7,6 +7,9 @@ start:
 up:
 	poetry run docker-compose up --force-recreate --remove-orphans -d
 
+run-db:
+	poetry run docker-compose -f docker-compose.test.yml up --remove-orphans -d
+
 stop:
 	poetry run docker-compose stop
 
