@@ -82,7 +82,7 @@ async def confirm(msg: types.Message, state: FSMContext):
         data = await state.get_data()
         async with sessionmaker() as session:
             courier = Courier(
-                id=msg.from_user.id,
+                telegram_id=msg.from_user.id,
                 name=data['name'],
                 contact=data['contact'],
                 has_thermal_bag=data['has_thermal_bag'],
