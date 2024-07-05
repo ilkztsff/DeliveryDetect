@@ -9,6 +9,7 @@ class Base(DeclarativeBase):
 class Courier(Base):
     __tablename__ = 'courier'
     id: Mapped[int] = mapped_column(primary_key=True)
+    telegram_id: Mapped[int]
     name: Mapped[str]
     contact: Mapped[str]
     has_thermal_bag: Mapped[bool]
