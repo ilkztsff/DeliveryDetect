@@ -28,11 +28,11 @@ class FloodMiddleware(BaseMiddleware):
         self.bot = bot
 
     async def __call__(
-            self, 
+            self,
             handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
             event: TelegramObject,
             data: Dict[str, Any]
-        ) -> Any:
+    ) -> Any:
 
         event_model = event.model_dump()
 
@@ -48,6 +48,6 @@ class FloodMiddleware(BaseMiddleware):
             return await handler(event, data)
         elif int(check) == 1:
             await self.redis.set(user, 0, 5)
-            return await self.bot.send_message('Не спамить!! Вы заблокированы на 5 секунд', chat_id=event_model['chat']['id'])
+            return await self.bot.send_message(text='Не спамить!! Вы заблокированы на 5 секунд', chat_id=int(event_model['chat']['id']))
         else:
             return None
