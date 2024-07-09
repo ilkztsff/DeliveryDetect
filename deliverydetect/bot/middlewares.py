@@ -47,7 +47,7 @@ class FloodMiddleware(BaseMiddleware):
             await self.redis.set(user, 1, 5)
             return await handler(event, data)
         elif int(check) == 1:
-            await self.redis.set(user, 0, 5)
+            await self.redis.set(user, 0, 1)
             return await self.bot.send_message(text='Не спамить!! Вы заблокированы на 5 секунд', chat_id=int(event_model['chat']['id']))
         else:
             return None
