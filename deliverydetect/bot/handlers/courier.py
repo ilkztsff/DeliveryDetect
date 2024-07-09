@@ -93,4 +93,5 @@ async def confirm(msg: types.Message, state: FSMContext):
         return await state.clear()
 
     await msg.reply('Хорошо, давай заново заполним форму. Введи своё имя')
+    await state.clear()
     await state.set_state(GetCourierInfo.GET_NAME)
