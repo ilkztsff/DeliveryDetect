@@ -13,6 +13,7 @@ services:
   redis:
     image: redis:7.2.4
     command: --port ${REDIS_PORT} --requirepass ${REDIS_PASSWORD}
+    container_name: redis
     environment:
       REDIS_DATABASES: 16
       REDIS_PORT: ${REDIS_PORT}
@@ -23,6 +24,7 @@ services:
       - ${REDIS_PORT}:${REDIS_PORT}
   postgres:
     image: postgres:16.3
+    container_name: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PORT: ${POSTGRES_PORT}
