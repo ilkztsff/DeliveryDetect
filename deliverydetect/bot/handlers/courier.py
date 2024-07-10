@@ -14,7 +14,7 @@ router = Router()
 
 
 @router.callback_query(RoleCallback.filter(F.role == Role.COURIER))
-async def edit_info(call: types.CallbackQuery, bot: Bot, callback_data: RoleCallback, state: FSMContext):
+async def add_info(call: types.CallbackQuery, bot: Bot, callback_data: RoleCallback, state: FSMContext):
     await bot.send_message(
         text='Как тебя зовут?\n(Укажи имя и фамилию)',
         chat_id=call.from_user.id,
