@@ -41,6 +41,7 @@ fix:
 
 test:
 	poetry run docker-compose -f docker-compose.test.yml up --remove-orphans -d
+	poetry run alembic upgrade head
 	poetry run pytest
 	poetry run docker-compose -f docker-compose.test.yml stop
 
