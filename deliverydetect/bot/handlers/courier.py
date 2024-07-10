@@ -80,16 +80,17 @@ async def confirm(msg: types.Message, state: FSMContext):
     if confirmation[msg.text] is True:
         await msg.reply('Сохраняем данные. Помощь по боту - /help')
         data = await state.get_data()
+        courier = Courier(
+            telegram_id=int(msg.from_user.id),
+            name=data['name'],
+            contact=data['contact'],
+            has_thermal_bag=data['has_thermal_bag'],
+            transport=data['transport']
+        )
         async with sessionmaker() as session:
-            courier = Courier(
-                telegram_id=msg.from_user.id,
-                name=data['name'],
-                contact=data['contact'],
-                has_thermal_bag=data['has_thermal_bag'],
-                transport=data['transport']
-            )
             session.add(courier)
             await session.commit()
+
         return await state.clear()
 
     await msg.reply('Хорошо, давай заново заполним форму. Введи своё имя')
