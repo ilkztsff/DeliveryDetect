@@ -2,13 +2,13 @@ from aiogram import Bot, Router, F, types
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 
-from deliverydetect.core.enums import Role, transport, confirmation
+from deliverydetect.core.enums import Role, Transport
 from deliverydetect.core.database import sessionmaker
 from deliverydetect.core.settings import _
-from deliverydetect.models.callback import RoleCallback
+from deliverydetect.models.callback import RoleCallback, TransportCallback, ConfirmationCallback
 from deliverydetect.models.database import Courier
 from deliverydetect.bot.states import GetCourierInfo
-from deliverydetect.bot.keyboards import yes_no_kb, choose_transport_kb
+from deliverydetect.bot.keyboards import yes_no_ikb, choose_transport_ikb
 
 
 router = Router()
@@ -35,54 +35,70 @@ async def get_name(msg: types.Message, state: FSMContext):
 @router.message(StateFilter(GetCourierInfo.GET_CONTACT))
 async def get_contact(msg: types.Message, state: FSMContext):
     await state.update_data(data={'contact': msg.text})
-    await msg.reply(_('Do you have a thermal bag?'), reply_markup=yes_no_kb)
+    await msg.reply(_('Do you have a thermal bag?'), reply_markup=yes_no_ikb)
     await state.set_state(GetCourierInfo.GET_HAS_THERMAL_BAG)
 
 
-@router.message(StateFilter(GetCourierInfo.GET_HAS_THERMAL_BAG))
-async def get_has_thermal_bag(msg: types.Message, state: FSMContext):
-    if msg.text not in list(confirmation.keys()) or msg.text is None:
+@router.callback_query(StateFilter(GetCourierInfo.GET_HAS_THERMAL_BAG))
+async def get_has_thermal_bag(call: types.CallbackQuery, bot: Bot, callback_data: ConfirmationCallback, state: FSMContext):
+    if not isinstance(call.data, bool):
         await state.set_state(GetCourierInfo.GET_HAS_THERMAL_BAG)
-        return await msg.reply(_('Invalid input. Use buttons'), reply_markup=yes_no_kb)
+        return await bot.send_message(
+            text=_('Invalid input - use buttons. Do you have a thermal bag?'),
+            chat_id=call.from_user.id,
+            reply_markup=yes_no_ikb
+        )
 
-    await state.update_data(data={'has_thermal_bag': confirmation[msg.text]})
-    await msg.reply(_('What kind of transport do you use?'), reply_markup=choose_transport_kb)
+    await state.update_data(data={'has_thermal_bag': call.data})
+    await bot.send_message(
+        text=_('What kind of transport do you use?'),
+        chat_id=call.from_user.id,
+        reply_markup=choose_transport_ikb
+    )
     await state.set_state(GetCourierInfo.GET_TRANSPORT)
 
 
-@router.message(StateFilter(GetCourierInfo.GET_TRANSPORT))
-async def get_transport(msg: types.Message, state: FSMContext):
-    if msg.text not in transport.keys() or msg.text is None:
+@router.callback_query(StateFilter(GetCourierInfo.GET_TRANSPORT))
+async def get_transport(call: types.CallbackQuery, bot: Bot, callback_data: TransportCallback, state: FSMContext):
+    if not isinstance(call.data, Transport):
         await state.set_state(GetCourierInfo.GET_TRANSPORT)
-        return await msg.reply(_('Invalid input. Use buttons'), reply_markup=choose_transport_kb)
+        return await bot.send_message(
+            text=_('Invalid input - use buttons. What kind of transport do you use?'),
+            chat_id=call.from_user.id,
+            reply_markup=choose_transport_ikb
+        )
 
-    await state.update_data(data={'transport': transport[msg.text]})
+    await state.update_data(data={'transport': call.data})
     data = await state.get_data()
-    await msg.reply(
+    await bot.send_message(
         text=_(f'''<b>Your data:</b>
 Name - {data['name']}
 Contact - {data['contact']}
-Has thermal bag - {'да' if data['has_thermal_bag'] else 'нет'}
-Transport - {msg.text[2:].lower()}
+Has thermal bag - {_('yes') if data['has_thermal_bag'] else _('no')}
+Transport - {call.data}
 
 Do you confirm it?'''),
-        reply_markup=yes_no_kb,
+        chat_id=call.from_user.id,
+        reply_markup=yes_no_ikb,
         parse_mode='html'
     )
     await state.set_state(GetCourierInfo.CONFIRM)
 
 
-@router.message(StateFilter(GetCourierInfo.CONFIRM))
-async def confirm(msg: types.Message, state: FSMContext):
-    if msg.text not in list(confirmation.keys()) or msg.text is None or msg.from_user is None:
+@router.callback_query(StateFilter(GetCourierInfo.CONFIRM))
+async def confirm(call: types.CallbackQuery, bot: Bot, callback_data: ConfirmationCallback, state: FSMContext):
+    if not isinstance(call.data, bool):
         await state.set_state(GetCourierInfo.CONFIRM)
-        return await msg.reply(_('Invalid input. Use buttons'))
+        return await bot.send_message(
+            text=_('Invalid input - use buttons. Is your data correct?'),
+            chat_id=call.from_user.id
+        )
 
-    if confirmation[msg.text] is True:
-        await msg.reply(_('Saving data... Bot usage - /help'))
+    if call.data:
+        await call.message.answer(_('Saving data... Bot usage - /help'))
         data = await state.get_data()
         courier = Courier(
-            telegram_id=int(msg.from_user.id),
+            telegram_id=int(call.from_user.id),
             name=data['name'],
             contact=data['contact'],
             has_thermal_bag=data['has_thermal_bag'],
@@ -94,6 +110,6 @@ async def confirm(msg: types.Message, state: FSMContext):
 
         return await state.clear()
 
-    await msg.reply(_('Okay, let\'s enter your data again. What is your name?'))
+    await call.message.answer(_('Okay, let\'s enter your data again. What is your name?'))
     await state.clear()
     await state.set_state(GetCourierInfo.GET_NAME)
