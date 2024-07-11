@@ -7,6 +7,10 @@ __pycache__/
 .coverage
 .pytest_cache/
 
+# Translation
+*.mo
+*.pot
+
 # Logging
 *.log
 logs/
