@@ -1,4 +1,5 @@
 from enum import Enum
+from deliverydetect.core.settings import _
 
 
 class Role(str, Enum):
@@ -7,10 +8,10 @@ class Role(str, Enum):
 
 
 class Transport(str, Enum):
-    FEET = 'feet'
-    BIKE = 'bike'
-    CAR = 'car'
-    MOTORBIKE = 'MOTORBIKE'
+    FEET = _('feet')
+    BIKE = _('bike')
+    CAR = _('car')
+    MOTORBIKE = _('MOTORBIKE')
 
 
 class CourierMenuState(str, Enum):
@@ -18,21 +19,3 @@ class CourierMenuState(str, Enum):
     CONTACT = 'contact'
     HAS_THERMAL_BAG = 'has_thermal_bag'
     TRANSPORT = 'transport'
-
-
-class Confirmation(str, Enum):
-    YES = True
-    NO = False
-
-
-transport = {
-    '🚴 Велосипед': Transport.BIKE,
-    '🚘 Автомобиль': Transport.CAR,
-    '🏍 Мотоцикл': Transport.MOTORBIKE,
-    '🧍 Я хожу пешком': Transport.FEET
-}
-
-confirmation = {
-    '✅ Да': True,
-    '❌ Нет': False
-}
