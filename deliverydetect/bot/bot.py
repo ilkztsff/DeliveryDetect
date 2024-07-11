@@ -5,7 +5,7 @@ from fastapi import FastAPI, APIRouter
 
 from contextlib import asynccontextmanager
 
-from deliverydetect.core.settings import WEBHOOK_URL, WEBHOOK_PATH, BOT_TOKEN
+from deliverydetect.core.settings import WEBHOOK_URL, WEBHOOK_PATH, BOT_TOKEN, _
 from deliverydetect.core.database import redis
 from deliverydetect.bot.handlers import courier_rt, customer_rt
 from deliverydetect.bot.keyboards import choose_role_ikb
@@ -39,4 +39,4 @@ async def telegram_webhook(request: dict):
 
 @dp.message(Command('start'))
 async def start(msg: types.Message):
-    await msg.reply('Кто вы?', reply_markup=choose_role_ikb)
+    await msg.reply(_('Кто вы?'), reply_markup=choose_role_ikb)

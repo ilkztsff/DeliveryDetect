@@ -1,5 +1,9 @@
 from dotenv import load_dotenv
 from os import environ
+import gettext
+
+
+_ = gettext.gettext
 
 
 load_dotenv()
